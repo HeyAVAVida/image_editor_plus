@@ -509,7 +509,14 @@ class _SingleImageEditorState extends State<SingleImageEditor> {
         key: scaf,
         appBar: AppBar(
           automaticallyImplyLeading: false,
-          actions: filterActions,
+          actions: [
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: filterActions,
+              ),
+            ),
+          ],
         ),
         body: GestureDetector(
           onScaleUpdate: (details) {
