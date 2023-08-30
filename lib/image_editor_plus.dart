@@ -360,7 +360,7 @@ class _SingleImageEditorState extends State<SingleImageEditor> {
 
           setState(() {});
         },
-      ).paddingSymmetric(horizontal: 8),
+      ),
       IconButton(
         icon: Icon(Icons.redo, color: undoLayers.isNotEmpty ? white : grey),
         onPressed: () {
@@ -370,29 +370,7 @@ class _SingleImageEditorState extends State<SingleImageEditor> {
 
           setState(() {});
         },
-      ).paddingSymmetric(horizontal: 8),
-      if (widget.allowGallery)
-        IconButton(
-          icon: const Icon(Icons.photo),
-          onPressed: () async {
-            var image = await picker.pickImage(source: ImageSource.gallery);
-
-            if (image == null) return;
-
-            loadImage(image);
-          },
-        ).paddingSymmetric(horizontal: 8),
-      if (widget.allowCamera)
-        IconButton(
-          icon: const Icon(Icons.camera_alt),
-          onPressed: () async {
-            var image = await picker.pickImage(source: ImageSource.camera);
-
-            if (image == null) return;
-
-            loadImage(image);
-          },
-        ).paddingSymmetric(horizontal: 8),
+      ),
       IconButton(
         icon: const Icon(Icons.check),
         onPressed: () async {
@@ -404,6 +382,39 @@ class _SingleImageEditorState extends State<SingleImageEditor> {
           Navigator.pop(context, binaryIntList);
         },
       ).paddingSymmetric(horizontal: 8),
+      if (widget.allowCamera || widget.allowGallery) ...[
+        PopupMenuButton(
+          color: Colors.grey[900],
+          itemBuilder: (BuildContext context) {
+            return [
+              if (widget.allowGallery)
+                PopupMenuItem(
+                  child: const Icon(Icons.photo, color: Colors.white),
+                  onTap: () async {
+                    var image =
+                        await picker.pickImage(source: ImageSource.gallery);
+
+                    if (image == null) return;
+
+                    loadImage(image);
+                  },
+                ),
+              if (widget.allowCamera)
+                PopupMenuItem(
+                  child: const Icon(Icons.camera_alt, color: Colors.white),
+                  onTap: () async {
+                    var image =
+                        await picker.pickImage(source: ImageSource.camera);
+
+                    if (image == null) return;
+
+                    loadImage(image);
+                  },
+                ),
+            ];
+          },
+        ),
+      ],
     ];
   }
 
